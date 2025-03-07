@@ -37,45 +37,41 @@ Este proyecto proporcionará experiencia práctica en desarrollo full-stack, dis
 
 ## Diagrama de Arquitectura ☁️
 
-* Usuario (User):
+Este diagrama representa la arquitectura de un sistema web de gestión de propiedades desplegado en AWS. A continuación, se describe el flujo de la información y los componentes involucrados:
 
-Es quien realiza solicitudes HTTP a través de un navegador web.
-* Navegador (Browser):
+* Usuario (User)
 
-Actúa como intermediario entre el usuario y el servidor HTTP.
-Realiza solicitudes HTTP al servidor en busca de recursos como archivos HTML, JavaScript, CSS o imágenes.
-* Servidor HTTP (HttpServer):
+Un usuario accede al sistema a través de un navegador web (Browser) ingresando la URL de la aplicación:
+http://ec2-52-91-91-122.compute-1.amazonaws.com:8080.
 
-Es el servidor que recibe y procesa las solicitudes HTTP enviadas por el navegador.
-Se encuentra dentro de un "grupo genérico", lo que indica que puede formar parte de una infraestructura más amplia.
+* Aplicación Web en AWS (PropertyController & Property)
 
-El navegador envía varias solicitudes HTTP al servidor en el puerto 35000 para diferentes rutas: 🛜
+La solicitud es dirigida a un servidor alojado en una instancia Amazon EC2, donde se ejecuta una aplicación Spring Boot.
+PropertyController: Controlador REST que gestiona las solicitudes HTTP del usuario.
+Property: Representa la entidad de propiedad inmobiliaria en la aplicación.
 
-* /script.js: Solicitud para obtener un archivo de JavaScript.
-* /index.html: Solicitud para cargar el archivo principal de la página web.
-* /estilos.css: Solicitud para cargar el archivo de estilos CSS.
-* /Imagen/Chill.jpg: Solicitud para obtener una imagen ubicada en una ruta específica.
-* Recursos (Archivos estáticos): Almacenados en el servidor, servidos a través de rutas específicas.
-* Comunicación: Protocolo HTTP entre el cliente y el servidor.
+* Recursos del Servidor
 
-El servidor procesa estas solicitudes y responde con los recursos correspondientes desde su sistema de archivos. 🌐
+El servidor puede manejar múltiples solicitudes y administrar recursos para procesarlas.
 
-* Servidor HTTP: Clase HttpServer que maneja solicitudes HTTP.
-* Manejo de rutas: Clase Route para mapear rutas específicas a manejadores.
-* Clases de soporte:
-* Request y Response para manejar y estructurar las solicitudes y respuestas.
-* Utils con funciones auxiliares
-* Archivos estáticos: Recursos en la carpeta resources/Files (HTML, CSS, imágenes, etc.).
-* API REST: Endpoints definidos en HttpServer para manejar /api/saludo, /api/fecha, etc.
-* Pruebas: Clases de prueba con JUnit para validar el comportamiento del servidor.
-  
-* Docker: ⌨️
-Los servicios están contenedorizados y desplegados en entornos Docker.
+* Base de Datos en AWS
 
-* Despliege en la nube: ☁️
-La comunicación HTTP final. Aquí es donde los servicios pueden estar alojados en un entorno de cloud computing como AWS
+Se utiliza AWS Database Migration Service (DMS) para la gestión y migración de bases de datos.
+Se almacena la información de las propiedades en una base de datos, probablemente en Amazon RDS (MySQL, PostgreSQL, etc.).
 
-![Diagrama en blanco (2)](https://github.com/user-attachments/assets/c4e1dff5-09ec-4b25-b25d-4d3bd9998acf)
+* Servicios de Migración en AWS
+
+AWS Server Migration Service (SMS) permite mover servidores y bases de datos hacia la nube de AWS.
+Este componente se encarga de la transferencia de datos entre servidores.
+
+* Comunicación Externa (HTTP)
+
+Finalmente, la información puede ser compartida con otros sistemas o servicios externos mediante protocolos HTTP.
+
+
+![Diagrama en blanco (3)](https://github.com/user-attachments/assets/46f66816-2a03-4141-8a59-b92b3720e993)
+
+Este diagrama muestra un sistema basado en AWS donde un usuario interactúa con una aplicación web en una instancia EC2, que a su vez gestiona propiedades inmobiliarias mediante una base de datos. Se incluyen herramientas de migración de AWS para administrar la infraestructura y los datos.
 
 ## Diagrama de Clase 💡
 
