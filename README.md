@@ -1,21 +1,39 @@
-# Desarrollo de marcos web para servicios REST y gestión de archivos estáticos 💻
+# Crear un sistema CRUD para gestionar propiedades 💻
 
-En este laboratorio exploraremos el desarrollo de frameworks web para servicios REST y así mismo la desplegaremos en aws usando EC2 y Docker. Para ello, utilizaremos los recursos obtenidos en el Taller 01, Taller 02 y Taller 03, realizando una mejora para que el framework sea concurrente y así mismo se pueda apagar de manera elegante.
+El propósito de este proyecto es desarrollar un sistema CRUD (Crear, Leer, Actualizar, Eliminar) para la gestión de propiedades inmobiliarias. La aplicación web permitirá a los usuarios administrar anuncios de propiedades de manera eficiente a través de una interfaz intuitiva y un backend robusto.
 
-Este framework incluirá herramientas que permitirán definir servicios REST mediante funciones Lambda, gestionar valores en las consultas (Query Parameters) y especificar la ubicación de archivos estáticos, se implementó métodos para apagar el servidor de manera elegante; es decir, cerrar correctamente todos los recursos antes de detenerse, evitando errores o conexiónes colgadas.
+Los usuarios podrán:
+✅ Crear nuevas propiedades agregando información detallada.
+✅ Visualizar una lista de propiedades disponibles y acceder a los detalles de cada una.
+✅ Actualizar los datos de una propiedad existente en caso de modificaciones.
+✅ Eliminar propiedades que ya no estén disponibles.
 
-Este proyecto nos ayudará a comprender los fundamentos del desarrollo de frameworks web para servicios REST, permitiéndonos:
+Para lograr esto, la aplicación se desarrollará con Spring Boot para el backend, MySQL como base de datos, y un frontend en HTML, JavaScript y AJAX (o Fetch API) para una experiencia de usuario fluida. Además, se desplegará en AWS, asegurando escalabilidad y disponibilidad.
 
-* Aplicar los conceptos del Taller 01 para construir una solución más robusta.
-* Explorar el uso de funciones Lambda en la definición de servicios REST.
-* Manejar parámetros de consulta (Query Parameters) para personalizar las respuestas del servicio.
-* Especificar la ubicación de archivos estáticos, facilitando el acceso a recursos como imágenes, scripts y hojas de estilo.
-* Si hay solicitudes en proceso, permitir que terminen antes de cerrar.
-* Cuando el servidor se detiene, debe liberar el puerto correctamente.
+## Componentes del Proyecto.
+
+1- Backend (Spring Boot)
+
+Controladores: Manejan las solicitudes HTTP y definen los endpoints de la API.
+Entidades: Representan las tablas de la base de datos.
+Repositorios: Proveen métodos para realizar operaciones CRUD en la base de datos.
+
+2- Frontend (HTML, CSS, JavaScript)
+
+HTML: Define la estructura de la página web.
+CSS: Aplica estilos a la página web.
+JavaScript: Maneja la lógica del frontend, incluyendo la interacción con la API del backend.
+
+3- Despliegue en AWS
+
+EC2: Instancias para ejecutar la aplicación.
+Docker: Contenedores para empaquetar y desplegar la aplicación.
 
 ## Descripción de la aplicación 📖
 
-La aplicación es un microframework en Java que configura y ejecuta un servidor HTTP simple y concurrente sin necesidad de frameworks externos como Spring o Spark. Este microframework proporciona una forma sencilla de configurar y ejecutar un servidor HTTP con soporte para rutas dinámicas, invocación reflejada de controladores y manejo de archivos estáticos.
+Esta aplicación web permite a los usuarios registrar, visualizar, actualizar y eliminar propiedades. Está construida utilizando Spring Boot en el backend y HTML, CSS y JavaScript en el frontend. La aplicación se conecta a una base de datos MySQL para almacenar la información de las propiedades.
+
+Este proyecto proporcionará experiencia práctica en desarrollo full-stack, diseño de APIs REST, gestión de bases de datos, y despliegue en la nube con AWS. 
 
 ## Diagrama de Arquitectura ☁️
 
@@ -61,15 +79,51 @@ La comunicación HTTP final. Aquí es donde los servicios pueden estar alojados 
 
 ## Diagrama de Clase 💡
 
-Este diagrama de clases representa la arquitectura de un microframework para servicios REST, dividiendo la funcionalidad en varias clases e interfaces.
+Este diagrama de clases representa la estructura del sistema CRUD para gestionar propiedades inmobiliarias utilizando Spring Boot y JPA.
 
-Las clases principales (Request, Response, HttpServer) manejan las solicitudes, respuestas y la lógica del servidor, mientras que las interfaces (Route) definen cómo implementar rutas personalizadas.
+![image](https://github.com/user-attachments/assets/dfffb328-24e9-46d8-91e4-4296849b34de)
 
-![image](https://github.com/user-attachments/assets/26319417-3811-4ad4-8b30-28ff1de7ccc5)
+## Descripción de las clases
 
-No se realizó cambios al diagrama de clases, ya que se modificó métodos dentro de las clases. 
+1. Clase Property (Entidad Principal)
+Esta clase representa una propiedad inmobiliaria y contiene los siguientes atributos:
 
-![image](https://github.com/user-attachments/assets/950f24b4-866d-4ddb-955e-c3649fb10bb9)
+id: Long → Identificador único de la propiedad.
+address: String → Dirección de la propiedad.
+price: String → Precio de la propiedad.
+size: String → Tamaño de la propiedad.
+description: String → Descripción de la propiedad.
+También incluye los métodos getter y setter para manipular los atributos.
+
+2. PropertyController (Controlador REST)
+Es el controlador de la API que maneja las operaciones CRUD y expone los endpoints REST.
+Contiene los siguientes métodos:
+
+requestMethodName(param: String): String → Un método auxiliar.
+createProperty(property: Property): Property → Crea una nueva propiedad.
+getAllProperties(): List<Property> → Devuelve una lista con todas las propiedades.
+getPropertyById(id: Long): ResponseEntity<Property> → Obtiene una propiedad por su ID.
+updateProperty(id: Long, propertyDetails: Property): ResponseEntity<Property> → Actualiza una propiedad existente.
+deleteProperty(id: Long): ResponseEntity<Void> → Elimina una propiedad.
+Este controlador interactúa con el repositorio PropertyRepository para acceder a la base de datos.
+
+3. PropertyRepository (Interfaz del Repositorio JPA)
+Es una interfaz que extiende JpaRepository<Property, Long>.
+
+Permite realizar operaciones sobre la base de datos, como guardar, actualizar, eliminar y buscar propiedades.
+Se enlaza directamente con la entidad Property.
+4. JpaRepository<Property, Long> (Interfaz Genérica de Spring Data JPA)
+JpaRepository<K, V> es una interfaz genérica donde K representa la entidad (Property) y V el tipo de la clave primaria (Long).
+Proporciona métodos listos para usar, como save(), findById(), findAll(), deleteById(), entre otros.
+
+5. ResponseEntity<T> (Clase para Manejo de Respuestas HTTP)
+Se usa para envolver respuestas HTTP en los métodos del controlador.
+ResponseEntity<Property> → Respuesta HTTP con una propiedad como cuerpo.
+ResponseEntity<Void> → Respuesta HTTP sin contenido, usada en eliminaciones (DELETE).
+Relaciones entre las clases
+PropertyController usa PropertyRepository para acceder a los datos.
+PropertyRepository extiende JpaRepository<Property, Long>, lo que permite manipular la base de datos sin escribir consultas SQL manuales.
+ResponseEntity<T> se utiliza en los métodos del controlador para manejar respuestas HTTP de forma adecuada.
 
 ## Comenzando 🚀
 
@@ -80,10 +134,11 @@ Las siguientes instrucciones le permitirán obtener una copia del proyecto en fu
 * [Maven](https://maven.apache.org/) : Gestor de dependencias y automatización de construcción para Java.
 * [JavaScript](https://nodejs.org/) : Lenguaje de programación para interactividad en la web.
 * [Java](https://www.java.com/es/) : Lenguaje de programación robusto para backend y aplicaciones empresariales.
+* [SpringBoot](https://spring.io) : Marco web de Java basado en microservicios de código abierto que ofrece Spring.
 
 ```
 * Versión Maven: 3.9.9
-* Versión Java: 21
+* Versión Java: 17
 ```
 
 ### Instalación 📦
@@ -91,9 +146,9 @@ Las siguientes instrucciones le permitirán obtener una copia del proyecto en fu
 Realice los siguientes pasos para clonar el proyecto en su máquina local.
 
 ```
-git clone https://github.com/Pau993/Taller04.git
-cd Taller04
-git checkout Taller04
+git clone https://github.com/Pau993/Taller05.git
+cd Taller05
+git checkout Taller05
 mvn clean compile
 ```
 
@@ -102,13 +157,13 @@ mvn clean compile
 Para ejecutar la aplicación, ejecute el siguiente comando:
 
 ```
-mvn exec:java -Dexec.mainClass="com.example.HttpServer"
+mvn exec:java -Dexec.mainClass="com.example.Application"
 
 ```
 
 El anterior comando limpiará las contrucciones previas, compilará y empaquetará el código en un jar y luego ejecutará la aplicación.
 
-Diríjase a su navegador de preferencia y vaya a la siguiente dirección: http://localhost:35000/ para ver la aplicación en funcionamiento.
+Diríjase a su navegador de preferencia y vaya a la siguiente dirección: [http://localhost:35000/](http://ec2-52-91-91-122.compute-1.amazonaws.com:8080) para ver la aplicación en funcionamiento.
 
 ## Ejecutando las pruebas ⚙️
 
@@ -119,26 +174,40 @@ Las pruebas realizadas en este proyecto se enfocan en la validación y verificac
 ```
 mvn test
 ```
-![image](https://github.com/user-attachments/assets/d51f5c64-3d0b-4b87-bec3-d6c058bc4675)
-
+![image](https://github.com/user-attachments/assets/1140e7e4-0f60-4a51-a479-3919a91e7e20)
 
 ## Descripción de las pruebas
 
-* testHandleApiRequestSaludo 🛠️
+1. testCreateProperty (Prueba de Creación de Propiedad)
+Descripción:
 
-Verifica que la solicitud a la ruta /api/saludo responde con HTTP 200 OK y contiene el mensaje JSON esperado.
-* testHandleApiRequestFecha 📅
+Simula una solicitud POST a /properties para crear una nueva propiedad.
+Envía un JSON con los datos de la propiedad.
+Verifica que la respuesta tenga un estado 200 OK.
+Valida que los datos de la respuesta sean los mismos que los enviados (dirección, precio, tamaño y descripción).
 
-Valida que la solicitud a /api/fecha devuelve HTTP 200 OK y contiene una clave "fecha" en la respuesta.
-* testHandleApiRequestNotFound ❌
+2. testGetPropertyById (Prueba de Consulta por ID)
+Descripción:
 
-Comprueba que una ruta inexistente, como /api/desconocido, devuelve HTTP 404 Not Found.
-* testHandleApiPostRequest 📤
+Crea y guarda una propiedad en la base de datos usando PropertyRepository.
+Simula una solicitud GET a /properties/{id} para recuperar la propiedad creada.
+Verifica que la respuesta tenga un estado 200 OK.
+Confirma que los datos obtenidos coincidan con los de la propiedad almacenada.
 
-Evalúa que una solicitud POST a /api/enviar con un cuerpo JSON sea procesada correctamente y responda con HTTP 200 OK y el mensaje
+3. testUpdateProperty (Prueba de Actualización de Propiedad)
+Descripción:
 
-* testHandleApiRequestHello
-Esta prueba verifica que el servidor HTTP maneje correctamente una solicitud a la ruta "/api/hello".
+Crea y guarda una propiedad en la base de datos.
+Simula una solicitud PUT a /properties/{id} con nuevos valores para actualizar la propiedad.
+Verifica que la respuesta tenga un estado 200 OK.
+Confirma que los datos de la propiedad fueron actualizados correctamente en la respuesta.
+
+4. testDeleteProperty (Prueba de Eliminación de Propiedad)
+Descripción:
+
+Crea y guarda una propiedad en la base de datos.
+Simula una solicitud DELETE a /properties/{id} para eliminar la propiedad.
+Verifica que la respuesta tenga un estado 204 No Content, lo que indica que la propiedad fue eliminada con éxito.
 
 ## Características principales: ⚙️
 
@@ -151,6 +220,8 @@ Esta prueba verifica que el servidor HTTP maneje correctamente una solicitud a l
 2. Gestión de archivos: ⚙️
 
 * Incluye botones interactivos que permiten abrir y visualizar archivos clave como:
+* Ver las propiedades
+* Agregar propiedades
 * Archivos JavaScript (script.js).
 * Hojas de estilo CSS (estilos.css).
 * Documentos HTML (index.html).
@@ -158,16 +229,7 @@ Esta prueba verifica que el servidor HTTP maneje correctamente una solicitud a l
 
 ## Muestra de la aplicación 🧩
 
-### Docker: 📡
-
-https://github.com/user-attachments/assets/bc11055e-1252-452d-9d4c-353277feddb6
-
-
-### Despliegue en AWS: ☁️
-
-https://github.com/user-attachments/assets/da33cd2a-90f2-45b9-9ca4-f30a140ed4b6
-
-Se optive el IpV4 y se despleg+o satisfactoriamente.
+https://github.com/user-attachments/assets/53671196-9b61-4c81-a61a-8d86f9b5cca9
 
 ## Autores ✒️
 
@@ -180,4 +242,3 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 ## Agradecimientos 🎁
 
 Agradecimientos al profeso Daniel Benavides por brindarme sus conocimientos.
-# Taller05
