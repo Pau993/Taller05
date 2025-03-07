@@ -3,9 +3,13 @@
 El propósito de este proyecto es desarrollar un sistema CRUD (Crear, Leer, Actualizar, Eliminar) para la gestión de propiedades inmobiliarias. La aplicación web permitirá a los usuarios administrar anuncios de propiedades de manera eficiente a través de una interfaz intuitiva y un backend robusto.
 
 Los usuarios podrán:
+
 ✅ Crear nuevas propiedades agregando información detallada.
+
 ✅ Visualizar una lista de propiedades disponibles y acceder a los detalles de cada una.
+
 ✅ Actualizar los datos de una propiedad existente en caso de modificaciones.
+
 ✅ Eliminar propiedades que ya no estén disponibles.
 
 Para lograr esto, la aplicación se desarrollará con Spring Boot para el backend, MySQL como base de datos, y un frontend en HTML, JavaScript y AJAX (o Fetch API) para una experiencia de usuario fluida. Además, se desplegará en AWS, asegurando escalabilidad y disponibilidad.
